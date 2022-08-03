@@ -5,7 +5,8 @@ import { ethers } from "hardhat";
 
 const {
     expectRevert,
-    snapshot
+    snapshot,
+    balance
 } = require("@openzeppelin/test-helpers");
 
 require("chai")
@@ -13,7 +14,7 @@ require("chai")
 
 describe("NFT Token", function () {
     //contract's constants
-    const MAX_SUPPLY: BigNumber = BigNumber.from(10);
+    const MAX_SUPPLY: BigNumber = BigNumber.from(1000);
 
     //test's constants
     const AMOUNT: BigNumber = ethers.utils.parseEther("100000");
@@ -55,12 +56,8 @@ describe("NFT Token", function () {
                 expect(await nftToken.owner()).to.equal(owner.address);
             });
 
-            it("should deploy with correct constants", async () => {
+            it("should deploy with correct max supply", async () => {
                 expect(await nftToken.MAX_SUPPLY()).to.equal(MAX_SUPPLY);    
-            });
-
-            it("should deploy with correct baseURI", async () => {
-                expect(await nftToken.baseURI()).to.equal(BASE_URI);    
             });
 
             it("should deploy with correct initial сost", async () => {
@@ -69,33 +66,10 @@ describe("NFT Token", function () {
 
         });
 
-        describe("Vesting Contract Owner Test Cases 👮", function () {
+        describe("NFT Token Owner Test Cases 👮", function () {
 
             after(async function () {
                 await snapshotB.restore();
-            });
-
-            it("should change baseURI", async () => {
-                let newBaseUri = "https://ipfs.io/ipfs/1/"
-
-                const tx = await nftToken.setBaseURI(newBaseUri);
-                await expect(tx).to.emit(
-                    nftToken,
-                  "SetBaseURI"
-                ).withArgs(
-                    newBaseUri
-                );
-
-                expect(await nftToken.baseURI()).to.equal(newBaseUri); 
-            });
-
-            it("shouldn't change baseURI from the non-current owner", async () => {
-                let newBaseUri = "https://ipfs.io/ipfs/1/"
-
-                await expectRevert(
-                    nftToken.connect(user1).setBaseURI(newBaseUri),
-                    "Ownable: caller is not the owner"
-                );
             });
 
             it("should change NFT cost", async () => {
@@ -123,7 +97,7 @@ describe("NFT Token", function () {
 
         });
 
-        describe("Vesting Contract Buy 💵 and Withdraw 💳 Test Cases", function () {
+        describe("NFT Token Buy 💵 and Withdraw 💳 Test Cases", function () {
 
             let tokenId = BigNumber.from(1);
 
@@ -132,6 +106,8 @@ describe("NFT Token", function () {
             });
 
             it("should sell NFT to the user", async () => {
+                const tracker = await balance.tracker(user1.address);
+
                 const tx = await nftToken.connect(user1).buy({value: INITIAL_COST});
                 await expect(tx).to.emit(
                     nftToken,
@@ -140,11 +116,16 @@ describe("NFT Token", function () {
                     user1.address,
                     tokenId,
                     INITIAL_COST
-                );
+                );    
 
                 expect(await nftToken.balanceOf(user1.address)).to.equal(tokenId); 
                 expect(await nftToken.ownerOf(tokenId)).to.equal(user1.address); 
+
                 tokenId = tokenId.add(1);
+
+                const { delta, fees } = await tracker.deltaWithFees();
+                expect(BigNumber.from(delta.add(fees).toString())).to.equal(INITIAL_COST.mul(-1));
+                
             });
 
             it("shouldn't sell NFT to the user if incorrect amount sent", async () => {
@@ -154,10 +135,13 @@ describe("NFT Token", function () {
                 );
             });
             
-            it("should sell all remaining NFTs to the user", async () => {          //IMPROVE 😶‍🌫️
+            it("should sell all remaining NFTs to the user", async () => {  //IMPROVE 😶‍🌫️
+                let buyPromises = [];
+
                 for(; tokenId.lte(MAX_SUPPLY); tokenId = tokenId.add(1)){
-                    await nftToken.connect(user2).buy({value: INITIAL_COST});
+                    buyPromises.push(nftToken.connect(user2).buy({value: INITIAL_COST}));
                 }
+                await Promise.all(buyPromises);
 
                 expect(await nftToken.balanceOf(user2.address)).to.equal(MAX_SUPPLY.sub(1)); 
             });
@@ -170,8 +154,10 @@ describe("NFT Token", function () {
             });
 
             it("should withdraw all ether from contract", async () => {
-                let ownerBalanceBefore = await ethers.provider.getBalance(owner.address);
+                const tracker = await balance.tracker(owner.address);
                 let contractBalanceBefore = await ethers.provider.getBalance(nftToken.address);
+
+                
                 let amount = INITIAL_COST.mul(MAX_SUPPLY);
 
                 expect(contractBalanceBefore).to.equal(amount);
@@ -184,17 +170,14 @@ describe("NFT Token", function () {
                     owner.address,
                     amount
                 );
-                const receipt = await tx.wait();
-
-                let fee = tx.gasPrice.mul(receipt.gasUsed);
-                let ownerBalanceAfter = await ethers.provider.getBalance(owner.address);
                 let contractBalanceAfter= await ethers.provider.getBalance(nftToken.address);
+                const { delta, fees } = await tracker.deltaWithFees();
 
-                expect(ownerBalanceAfter).to.equal(ownerBalanceBefore.add(amount).sub(fee));
+                expect(BigNumber.from(delta.add(fees).toString())).to.equal(amount);
                 expect(contractBalanceAfter).to.equal(0);
             });
 
-            it("should withdraw all ether if no ether in the contact", async () => {
+            it("shouldn't allow to withdraw if there is no ether on contract balance", async () => {
                 await expectRevert(
                     nftToken.withdraw(),
                     "NFT: no ether in the contact"

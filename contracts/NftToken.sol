@@ -6,13 +6,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract NftToken is ERC721("My NFT Collection", "MNFTC"), Ownable {
     using Strings for uint256;
-
-    uint256 constant public MAX_SUPPLY = 10;
-    string public baseURI;
+    
+    uint256 constant public MAX_SUPPLY = 1000;
+    string public baseUri;
     uint256 public cost;
     uint256 public totalSupply;
 
-    event SetBaseURI(string newBaseURI);
     event SetCost(uint256 newCost);
     event Buy(address indexed to, uint256 tokenId, uint256 cost);
     event Withdraw(address indexed to, uint256 amount);
@@ -20,56 +19,12 @@ contract NftToken is ERC721("My NFT Collection", "MNFTC"), Ownable {
     /**
      * @dev Initializes the base link and initial cost
      *
-     * @param initBaseURI Base URI
+     * @param initBaseUri Base URI
      * @param initCost Initial cost
      */
-    constructor(string memory initBaseURI, uint256 initCost) {
-        setBaseURI(initBaseURI);
+    constructor(string memory initBaseUri, uint256 initCost) {
+        baseUri = initBaseUri;
         setCost(initCost);
-    }
-
-    /**
-     * @dev Override basic function that returns a base URI.
-     * Without parameters.
-     */
-    function _baseURI() internal view override returns (string memory) {
-        return baseURI;
-    }
-
-    /**
-     * @dev Override basic function that returns a token Uniform Resource Identifier (URI)
-     *
-     * @param tokenId Token ID
-     */
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        _requireMinted(tokenId);
-
-        string memory currentBaseURI = _baseURI();
-        return bytes(currentBaseURI).length > 0 ? string(abi.encodePacked(currentBaseURI, tokenId.toString(), ".json")) : "";
-    }
-
-    /**
-     * @dev Sets a new base URI
-     * Can only be called by the current owner.
-     *
-     * Emits an {SetBaseURI} event that indicates that the base URI has changed
-     * @param newBaseUri New base URI
-     */
-    function setBaseURI(string memory newBaseUri) public onlyOwner {
-        baseURI = newBaseUri;
-        emit SetBaseURI(newBaseUri);
-    }
-
-    /**
-     * @dev Sets a new NFT cost
-     * Can only be called by the current owner.
-     *
-     * Emits an {SetCost} event that indicates that the NFT cost has changed
-     * @param newCost New NFT cost
-     */
-    function setCost(uint256 newCost) public onlyOwner {
-        cost = newCost;
-        emit SetCost(newCost);
     }
 
     /**
@@ -104,5 +59,35 @@ contract NftToken is ERC721("My NFT Collection", "MNFTC"), Ownable {
         require(success, "NFT: unable to withdraw, recipient may have reverted");
 
         emit Withdraw(msg.sender, amountToSend);
+    }
+
+    /**
+     * @dev Override basic function that returns a token Uniform Resource Identifier (URI)
+     *
+     * @param tokenId Token ID
+     */
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        _requireMinted(tokenId);
+        return bytes(baseUri).length > 0 ? string(abi.encodePacked(baseUri, tokenId.toString(), ".json")) : "";
+    }
+
+    /**
+     * @dev Sets a new NFT cost
+     * Can only be called by the current owner.
+     *
+     * Emits an {SetCost} event that indicates that the NFT cost has changed
+     * @param newCost New NFT cost
+     */
+    function setCost(uint256 newCost) public onlyOwner {
+        cost = newCost;
+        emit SetCost(newCost);
+    }
+
+    /**
+     * @dev Override basic function that returns a base URI.
+     * Without parameters.
+     */
+    function _baseURI() internal view override returns (string memory) {
+        return baseUri;
     }
 }
