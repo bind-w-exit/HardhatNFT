@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ▶️🛠️ V1
     PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network ropsten_infuraGenerating typings for: 11 artifacts in dir: typechain for target: ethers-v5
     Successfully generated 19 typings!
@@ -55,38 +54,3 @@
     Reason: Already Verified
 
     For more info run Hardhat with --show-stack-traces
-
-=======
-PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network ropsten_infuraGenerating typings for: 11 artifacts in dir: typechain for target: ethers-v5
-Successfully generated 19 typings!
-Compiled 11 Solidity files successfully
-TEVA Token deployed to: 0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940
-
-PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat verify --network ropsten_infura 0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940 "https://ipfs.io/ipfs/QmTrjsP7zCF47anH6kBLgAmjjwd769p5PS8ffyfVUJtpCf/" "10000000000000000"
-Nothing to compile
-No need to generate any newer typings.
-Successfully submitted source code for contract
-contracts/NftToken.sol:NftToken at 0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940
-for verification on the block explorer. Waiting for verification result...
-
-Successfully verified contract NftToken on Etherscan.
-https://ropsten.etherscan.io/address/0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940#code
-
-PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network infura_rinkeby
-No need to generate any newer typings.
-NFT deployed to: 0x8DC44f6A0a933C07E4B2BF366F9273ffD3Dd4dCe
-
-PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network infura_rinkeby
-No need to generate any newer typings.
-NFT deployed to: 0x52D1083c355af7B13a0653372CaE45c0f39F1d94
-
-PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat verify --network infura_rinkeby 0x52D1083c355af7B13a0653372CaE45c0f39F1d94 "https://ipfs.io/ipfs/QmTrjsP7zCF47anH6kBLgAmjjwd769p5PS8ffyfVUJtpCf/" "10000000000000000"
-Nothing to compile
-No need to generate any newer typings.
-Successfully submitted source code for contract
-contracts/NftToken.sol:NftToken at 0x52D1083c355af7B13a0653372CaE45c0f39F1d94
-for verification on the block explorer. Waiting for verification result...
-
-Successfully verified contract NftToken on Etherscan.
-https://rinkeby.etherscan.io/address/0x52D1083c355af7B13a0653372CaE45c0f39F1d94#code
->>>>>>> 3bff124ca546a1d3e8cde086231bbd8ceb632781
