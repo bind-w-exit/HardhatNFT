@@ -1,0 +1,57 @@
+▶️🛠️ V1
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network ropsten_infuraGenerating typings for: 11 artifacts in dir: typechain for target: ethers-v5
+    Successfully generated 19 typings!
+    Compiled 11 Solidity files successfully
+    TEVA Token deployed to: 0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940
+▶️
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat verify --network ropsten_infura 0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940 "https://ipfs.io/ipfs/QmTrjsP7zCF47anH6kBLgAmjjwd769p5PS8ffyfVUJtpCf/" "10000000000000000"
+    Nothing to compile
+    No need to generate any newer typings.
+    Successfully submitted source code for contract
+    contracts/NftToken.sol:NftToken at 0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940
+    for verification on the block explorer. Waiting for verification result...
+
+    Successfully verified contract NftToken on Etherscan.
+    https://ropsten.etherscan.io/address/0x70796EE733CFEDa95Cb8A89e5ab2DC8130c28940#code
+
+▶️🛠️ V2
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network infura_rinkeby
+    No need to generate any newer typings.
+    NFT deployed to: 0x52D1083c355af7B13a0653372CaE45c0f39F1d94
+▶️
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat verify --network infura_rinkeby 0x52D1083c355af7B13a0653372CaE45c0f39F1d94 "https://ipfs.io/ipfs/QmTrjsP7zCF47anH6kBLgAmjjwd769p5PS8ffyfVUJtpCf/" "10000000000000000"
+    Nothing to compile
+    No need to generate any newer typings.
+    Successfully submitted source code for contract
+    contracts/NftToken.sol:NftToken at 0x52D1083c355af7B13a0653372CaE45c0f39F1d94
+    for verification on the block explorer. Waiting for verification result...
+
+    Successfully verified contract NftToken on Etherscan.
+    https://rinkeby.etherscan.io/address/0x52D1083c355af7B13a0653372CaE45c0f39F1d94#code
+
+▶️🛠️ V3
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat run scripts/deploy.ts --network infura_rinkeby
+    No need to generate any newer typings.
+    NFT deployed to: 0xF753E797C16488465429Ad1B797be5CAC2EB704E
+▶️    
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat verify --network infura_rinkeby 0xF753E797C16488465429Ad1B797be5CAC2EB704E "https://ipfs.io/ipfs/QmTrjsP7zCF47anH6kBLgAmjjwd769p5PS8ffyfVUJtpCf/" "10000000000000000"
+    Nothing to compile
+    No need to generate any newer typings.
+    Successfully submitted source code for contract
+    contracts/NftToken.sol:NftToken at 0xF753E797C16488465429Ad1B797be5CAC2EB704E
+    for verification on the block explorer. Waiting for verification result...
+
+    Terminate batch job (Y/N)? y
+    PS C:\Users\12And\Desktop\solidity\HardhatNFT> npx hardhat verify --network infura_rinkeby 0xF753E797C16488465429Ad1B797be5CAC2EB704E "https://ipfs.io/ipfs/QmTrjsP7zCF47anH6kBLgAmjjwd769p5PS8ffyfVUJtpCf/" "10000000000000000"
+    Nothing to compile
+    No need to generate any newer typings.
+    Successfully submitted source code for contract
+    contracts/NftToken.sol:NftToken at 0xF753E797C16488465429Ad1B797be5CAC2EB704E
+    for verification on the block explorer. Waiting for verification result...
+
+    Error in plugin @nomiclabs/hardhat-etherscan: The Etherscan API responded with a failure status.
+    The verification may still succeed but should be checked manually.
+    Reason: Already Verified
+
+    For more info run Hardhat with --show-stack-traces
+
